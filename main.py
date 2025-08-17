@@ -27,14 +27,33 @@ def insert_text(text,size,color,x,y):
     rect_text = set_text.get_rect(center=(x,y))
     screen.blit(set_text, rect_text)
     
-#display playlist/song
-def draw_button(x, y, width, height, bg_color, text, font_color):
-    set_button = pygame.Rect(x, y, width, height)
-    pygame.draw.rect(screen, bg_color, set_button)
-    font = pygame.font.Font("retro_gaming.ttf",16)
-    set_text = font.render(text, True, font_color)
-    set_text_rect = pygame.Rect(x+19, y+8, width, height)
-    screen.blit(set_text, set_text_rect)
+class BUTTON:
+    def __init__(self, x, y, width, height, bg_color, text, font_color):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.bg_color = bg_color
+        self.text = text
+        self.font_color = font_color
+
+    #display playlist/song
+    def insert_button(self):
+        set_button = pygame.Rect(self.x, self.y, self.width, self.height)
+        pygame.draw.rect(screen, self.bg_color, set_button)
+        font = pygame.font.Font("retro_gaming.ttf",16)
+        set_text = font.render(self.text, True, self.font_color)
+        set_text_rect = pygame.Rect(self.x+19, self.y+8, self.width, self.height)
+        screen.blit(set_text, set_text_rect)
+
+# #display playlist/song
+# def draw_button(x, y, width, height, bg_color, text, font_color):
+#     set_button = pygame.Rect(x, y, width, height)
+#     pygame.draw.rect(screen, bg_color, set_button)
+#     font = pygame.font.Font("retro_gaming.ttf",16)
+#     set_text = font.render(text, True, font_color)
+#     set_text_rect = pygame.Rect(x+19, y+8, width, height)
+#     screen.blit(set_text, set_text_rect)
     
 #box (will act as background for text)
 def draw_box(coordinate, width, height, color):
@@ -43,9 +62,12 @@ def draw_box(coordinate, width, height, color):
     set_box = pygame.Rect(x, y, width, height)
     pygame.draw.rect(screen, color, set_box)
 
+playlist_1 = BUTTON(41,104,308,36, black, "Playlist 1", grey)
+playlist_2 = BUTTON(41,140,308,36, grey, "Playlist 2", black)
+playlist_3 = BUTTON(41,176,308,36, grey, "Playlist 3", black)
+playlist_4 = BUTTON(41,212,308,36, grey, "Playlist 4", black)
 
 def homescreen():
-    run = True
     screen.fill(white)
     draw_box((41,68),308,216,grey) #screen
     popup_image('controller.png',94,203) #ipod controller
@@ -54,11 +76,12 @@ def homescreen():
     popup_image('prev_song_icon.png',98, 310) #prev song button
     popup_image('play_pause_icon.png',203,410) #play/pause button
     insert_text("Tym's iPod",16,black,185,85)
-    playlist_1 = draw_button(41,104,308,36, black, "Playlist 1", grey)
-    playlist_2 = draw_button(41,140,308,36, grey, "Playlist 2", black)
-    playlist_3 = draw_button(41,176,308,36, grey, "Playlist 3", black)
-    playlist_4 = draw_button(41,212,308,36, grey, "Playlist 4", black)
+    playlist_1.insert_button()
+    playlist_2.insert_button()
+    playlist_3.insert_button()
+    playlist_4.insert_button()
     
+#main loop
 run = True
 while run:
 
