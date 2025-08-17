@@ -8,7 +8,7 @@ screen = pygame.display.set_mode(screen_size) # opens up a window
 pygame.display.set_caption("Tym's iPod") # window name
 
 #initialise variable
-current_playlist = 1
+current_playlist = 2
 
 #colors
 black = (57, 55, 57)
@@ -53,15 +53,6 @@ class BUTTON:
     def not_hover_button(self):
         self.bg_color = grey
         self.font_color = black
-
-# #display playlist/song
-# def draw_button(x, y, width, height, bg_color, text, font_color):
-#     set_button = pygame.Rect(x, y, width, height)
-#     pygame.draw.rect(screen, bg_color, set_button)
-#     font = pygame.font.Font("retro_gaming.ttf",16)
-#     set_text = font.render(text, True, font_color)
-#     set_text_rect = pygame.Rect(x+19, y+8, width, height)
-#     screen.blit(set_text, set_text_rect)
     
 #box (will act as background for text)
 def draw_box(coordinate, width, height, color):
@@ -70,14 +61,14 @@ def draw_box(coordinate, width, height, color):
     set_box = pygame.Rect(x, y, width, height)
     pygame.draw.rect(screen, color, set_box)
 
-playlist_1 = BUTTON(41,104,308,36, black, "Playlist 1", grey)
-playlist_2 = BUTTON(41,140,308,36, grey, "Playlist 2", black)
+playlist_1 = BUTTON(41,104,308,36, grey, "Playlist 1", black)
+playlist_2 = BUTTON(41,140,308,36, black, "Playlist 2", grey)
 playlist_3 = BUTTON(41,176,308,36, grey, "Playlist 3", black)
 playlist_4 = BUTTON(41,212,308,36, grey, "Playlist 4", black)
 
 playlists = [playlist_1, playlist_2, playlist_3, playlist_4]
 
-def homescreen():
+def iPod_interface():
     screen.fill(white)
     draw_box((41,68),308,216,grey) #screen
     popup_image('controller.png',94,203) #ipod controller
@@ -85,11 +76,25 @@ def homescreen():
     popup_image('next_song_icon.png',302,310) #next song button
     popup_image('prev_song_icon.png',98, 310) #prev song button
     popup_image('play_pause_icon.png',203,410) #play/pause button
+
+def homescreen():
+    iPod_interface()
     insert_text("Tym's iPod",16,black,185,85)
     #display all the available playlist
     for playlist in playlists:
         playlist.insert_button()
-    
+    pygame.display.flip()
+
+def playlist1_screen():
+    screen.fill(black)
+    iPod_interface()
+    insert_text("Playlist 1",16,black,185,85)
+    pygame.display.flip()
+
+page = "homescreen"
+homescreen()
+
+####################################################################
 #main loop
 run = True
 while run:
@@ -97,28 +102,43 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        if event.type == pygame.KEYDOWN:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    if current_playlist == 1:
-                        current_playlist = 1
-                        print("Current playlist = " + str(current_playlist))
-                    else:
-                        current_playlist -= 1
-                        print("Current playlist = " + str(current_playlist))
-            if event.key == pygame.K_DOWN:
-                if current_playlist != 5: #max number of playlist available
-                    current_playlist += 1 #move to the next playlist (below it)
-                    print("Current playlist = " + str(current_playlist))
-                else:
-                    current_playlist = 1 #if reach the last playlist, go back to top
-                    print("Current playlist = " + str(current_playlist))
 
-    
-    homescreen()
+        if event.type == pygame.KEYDOWN:
+
+            #up arrow is clicked
+            if event.key == pygame.K_UP:
+                if page == "homescreen":
+                    if current_playlist <= len(playlists):
+                        if current_playlist == 1:
+                            current_playlist = 1
+                            print("Current playlist = " + str(current_playlist))
+                        else:
+                            current_playlist -= 1
+                            print("Current playlist = " + str(current_playlist))
+                            playlists[current_playlist-1].hover_button()
+                            playlists[current_playlist].not_hover_button()
+                        homescreen() #redraw the screen
+
+            #down arrow is clicked
+            elif event.key == pygame.K_DOWN:
+                if page == "homescreen":
+                    if current_playlist <= len(playlists):
+                        if current_playlist != len(playlists): #max number of playlist available
+                            current_playlist += 1 #move to the next playlist (below it)
+                            print("Current playlist = " + str(current_playlist))
+                            playlists[current_playlist-1].hover_button()
+                            playlists[current_playlist-2].not_hover_button()
+                        else:
+                            current_playlist = current_playlist #if reach the last playlist, go back to top
+                            print("Current playlist = " + str(current_playlist))
+                        homescreen() #redraw the screen
+
+            elif event.key == pygame.K_RETURN:
+                if current_playlist == 1:
+                    playlist1_screen()
+                    page = "Playlist 1"
+                    print("Changing screen...")
 
     pygame.display.flip() #updates the display
 
 pygame.quit() #quit pygame
-
-homescreen()
