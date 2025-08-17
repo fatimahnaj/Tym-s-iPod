@@ -45,6 +45,14 @@ class BUTTON:
         set_text = font.render(self.text, True, self.font_color)
         set_text_rect = pygame.Rect(self.x+19, self.y+8, self.width, self.height)
         screen.blit(set_text, set_text_rect)
+    
+    def hover_button(self):
+        self.bg_color = black
+        self.font_color = grey
+
+    def not_hover_button(self):
+        self.bg_color = grey
+        self.font_color = black
 
 # #display playlist/song
 # def draw_button(x, y, width, height, bg_color, text, font_color):
@@ -67,6 +75,8 @@ playlist_2 = BUTTON(41,140,308,36, grey, "Playlist 2", black)
 playlist_3 = BUTTON(41,176,308,36, grey, "Playlist 3", black)
 playlist_4 = BUTTON(41,212,308,36, grey, "Playlist 4", black)
 
+playlists = [playlist_1, playlist_2, playlist_3, playlist_4]
+
 def homescreen():
     screen.fill(white)
     draw_box((41,68),308,216,grey) #screen
@@ -76,10 +86,9 @@ def homescreen():
     popup_image('prev_song_icon.png',98, 310) #prev song button
     popup_image('play_pause_icon.png',203,410) #play/pause button
     insert_text("Tym's iPod",16,black,185,85)
-    playlist_1.insert_button()
-    playlist_2.insert_button()
-    playlist_3.insert_button()
-    playlist_4.insert_button()
+    #display all the available playlist
+    for playlist in playlists:
+        playlist.insert_button()
     
 #main loop
 run = True
