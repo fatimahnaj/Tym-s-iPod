@@ -109,6 +109,9 @@ Meet_You_Halfway = MUSIC('playlist_1/Meet You Halfway.mp3')
 Moments_of_Good_Time = MUSIC('playlist_1/Moments of Good Time.mp3')
 StudyJazz_playlist = [A_Better_Tomorrow, Amazing_Things, Meet_You_Halfway, Moments_of_Good_Time]
 
+#queue
+currently_playing = [A_Better_Tomorrow]
+
 def iPod_interface():
     screen.fill(white)
     draw_box((41,68),308,216,grey) #screen
@@ -215,7 +218,10 @@ while run:
                     if current_p1_song == 1:
                         if not playing:
                             print("Selecting 1st song..")
-                            StudyJazz_playlist[0].play_music()
+                            # StudyJazz_playlist[0].play_music()
+                            currently_playing.append(A_Better_Tomorrow)
+                            currently_playing.pop(0)
+                            currently_playing[0].play_music()
                         else:
                             StudyJazz_playlist[0].pause_music()
                     if current_p1_song == 2:
@@ -237,6 +243,13 @@ while run:
                         else:
                             StudyJazz_playlist[3].pause_music()
                     playlist1_screen()
+
+            #pause/unpause the song
+            #elif event.key == pygame.K_SPACE:
+                #create an array to store the currently playing song. 
+                # when i play the song, append the song into the array (works like a queue)
+                # when i switch (if current song != song inside array) -> chg the currently playing song
+                # when i pause, pause the current song in the array
 
     pygame.display.flip() #updates the display
 
