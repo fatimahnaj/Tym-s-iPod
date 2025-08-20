@@ -112,6 +112,14 @@ StudyJazz_playlist = [A_Better_Tomorrow, Amazing_Things, Meet_You_Halfway, Momen
 #queue
 currently_playing = [A_Better_Tomorrow]
 
+def play_new_song(song_title):
+    global playing
+    if not playing:
+        print("Currently playing: " )
+        currently_playing.append(song_title)
+        currently_playing.pop(0)
+        currently_playing[0].play_music()
+
 def iPod_interface():
     screen.fill(white)
     draw_box((41,68),308,216,grey) #screen
@@ -152,9 +160,8 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-
+        #check if any button is clicked
         if event.type == pygame.KEYDOWN:
-
             #up arrow is clicked
             if event.key == pygame.K_UP:
                 playing = False
@@ -216,36 +223,20 @@ while run:
                         print("Changing to screen " + page + " ...")
                 elif page == "playlist_1":
                     if current_p1_song == 1:
-                        if not playing:
-                            print("Selecting 1st song..")
-                            # StudyJazz_playlist[0].play_music()
-                            currently_playing.append(A_Better_Tomorrow)
-                            currently_playing.pop(0)
-                            currently_playing[0].play_music()
-                        else:
-                            StudyJazz_playlist[0].pause_music()
+                        play_new_song(A_Better_Tomorrow)
                     if current_p1_song == 2:
-                        if not playing:
-                            print("Selecting 2nd song..")
-                            StudyJazz_playlist[1].play_music()
-                        else:
-                            StudyJazz_playlist[1].pause_music()
+                        play_new_song(Amazing_Things)
                     if current_p1_song == 3:
-                        if not playing:
-                            print("Selecting 3rd song..")
-                            StudyJazz_playlist[2].play_music()
-                        else:
-                            StudyJazz_playlist[2].pause_music()
+                        play_new_song(Meet_You_Halfway)
                     if current_p1_song == 4:
-                        if not playing:
-                            print("Selecting 4th song..")
-                            StudyJazz_playlist[3].play_music()
-                        else:
-                            StudyJazz_playlist[3].pause_music()
-                    playlist1_screen()
+                        play_new_song(Moments_of_Good_Time)
 
             #pause/unpause the song
-            #elif event.key == pygame.K_SPACE:
+            elif event.key == pygame.K_SPACE:
+                if playing:
+                    currently_playing[0].pause_music()
+                else:
+                    currently_playing[0].unpause_music()
                 #create an array to store the currently playing song. 
                 # when i play the song, append the song into the array (works like a queue)
                 # when i switch (if current song != song inside array) -> chg the currently playing song
