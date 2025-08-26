@@ -1,6 +1,6 @@
 import pygame
 from songs_list import *
-from buttons import *
+from options import *
 
 pygame.init()
 pygame.mixer.init()
@@ -55,6 +55,48 @@ class IMAGE:
             image = pygame.image.load(self.image_link)
         screen.blit(image, (self.x,self.y))
 
+class BUTTON:
+    def __init__(self,image,x,y):
+        self.trigger_button = False
+        self.start_time = 0
+        self.max_duration = 3000
+        self.x = x
+        self.y = y
+        if image == None:
+            self.image = ""
+        else:
+            self.image = image
+
+    #used when the reuirements are met
+    def trigger(self):
+        self.trigger_button = True #
+        self.start_time = pygame.time.get_ticks()
+
+    def show_img(self):
+        if self.trigger_button:
+                current_time = pygame.time.get_ticks()
+                #limit the button to only show changes for a period of a time
+                if current_time - self.start_time < self.max_duration:
+                    # Load the image
+                    image = pygame.image.load(self.image).convert_alpha()
+                    # Calculate its position to center it on the screen
+                    rect = image.get_rect()
+                    screen.blit(image, (self.x,self.y))
+                else:
+                    self.trigger_button = False
+
+    def show_text(self,text,size,color=black):
+            if self.trigger_button:
+                current_time = pygame.time.get_ticks()
+                if current_time - self.start_time < self.max_duration:
+                    #load the texts
+                    font = pygame.font.Font("DePixelHalbfett.ttf",size)
+                    rect = font.render(f"{text}", True, color)
+                    rect_text = rect.get_rect(center=(self.x,self.y))
+                    screen.blit(rect, rect_text)
+                else:
+                    self.trigger_button = False
+
 menu_button = IMAGE('menu_text.png',196-22,221+122)
 
 #insert text
@@ -106,7 +148,7 @@ def homescreen():
     insert_text("Tym's iPod",16,black,185,85)
     #display all the available playlist
     for playlist in playlists:
-        playlist.insert_button()
+        playlist.insert_option()
     pygame.display.flip()
 
 def create_playlist_screen(playlist_name, playlist_songlist):
@@ -115,7 +157,7 @@ def create_playlist_screen(playlist_name, playlist_songlist):
     popup_image('pause_status.png',58,79)
     insert_text(playlist_name,16,black,185,85)
     for song in playlist_songlist:
-        song.insert_button()
+        song.insert_option()
     pygame.display.flip()
 
 def playlist1_screen():
@@ -154,7 +196,7 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        #check if any button is clicked
+        #check if any option is clicked
         if event.type == pygame.KEYDOWN:
             #up arrow is clicked
             if event.key == pygame.K_UP:
@@ -167,8 +209,8 @@ while run:
                         else:
                             current_playlist -= 1
                             print("Current playlist = " + str(current_playlist))
-                            playlists[current_playlist-1].hover_button()
-                            playlists[current_playlist].not_hover_button()
+                            playlists[current_playlist-1].hover_option()
+                            playlists[current_playlist].not_hover_option()
                         homescreen() #redraw the screen
                 elif page == "playlist_1":
                     if current_p1_song <= len(p1_songs):
@@ -178,8 +220,8 @@ while run:
                         else:
                             current_p1_song -= 1
                             print("Current song (in playlist 1): song " + str(current_p1_song) )
-                            p1_songs[current_p1_song-1].hover_button()
-                            p1_songs[current_p1_song].not_hover_button()
+                            p1_songs[current_p1_song-1].hover_option()
+                            p1_songs[current_p1_song].not_hover_option()
                         playlist1_screen()
                 elif page == "playlist_2":
                     if current_p2_song <= len(p2_songs):
@@ -189,8 +231,8 @@ while run:
                         else:
                             current_p2_song -= 1
                             print("Current song (in playlist 2): song " + str(current_p2_song) )
-                            p2_songs[current_p2_song-1].hover_button()
-                            p2_songs[current_p2_song].not_hover_button()
+                            p2_songs[current_p2_song-1].hover_option()
+                            p2_songs[current_p2_song].not_hover_option()
                         playlist2_screen()
                 elif page == "playlist_3":
                     if current_p3_song <= len(p3_songs):
@@ -200,8 +242,8 @@ while run:
                         else:
                             current_p3_song -= 1
                             print("Current song (in playlist 3): song " + str(current_p3_song) )
-                            p3_songs[current_p3_song-1].hover_button()
-                            p3_songs[current_p3_song].not_hover_button()
+                            p3_songs[current_p3_song-1].hover_option()
+                            p3_songs[current_p3_song].not_hover_option()
                         playlist3_screen()
 
                 elif page == "playlist_4":
@@ -212,8 +254,8 @@ while run:
                         else:
                             current_p4_song -= 1
                             print("Current song (in playlist 4): song " + str(current_p4_song) )
-                            p4_songs[current_p4_song-1].hover_button()
-                            p4_songs[current_p4_song].not_hover_button()
+                            p4_songs[current_p4_song-1].hover_option()
+                            p4_songs[current_p4_song].not_hover_option()
                         playlist4_screen()
 
                 elif page == "playlist_5":
@@ -224,8 +266,8 @@ while run:
                         else:
                             current_p5_song -= 1
                             print("Current song (in playlist 5): song " + str(current_p5_song) )
-                            p5_songs[current_p5_song-1].hover_button()
-                            p5_songs[current_p5_song].not_hover_button()
+                            p5_songs[current_p5_song-1].hover_option()
+                            p5_songs[current_p5_song].not_hover_option()
                         playlist5_screen()
 
             #down arrow is clicked
@@ -236,8 +278,8 @@ while run:
                         if current_playlist != len(playlists): #max number of playlist available
                             current_playlist += 1 #move to the next playlist (below it)
                             print("Current playlist = " + str(current_playlist))
-                            playlists[current_playlist-1].hover_button()
-                            playlists[current_playlist-2].not_hover_button()
+                            playlists[current_playlist-1].hover_option()
+                            playlists[current_playlist-2].not_hover_option()
                         else:
                             current_playlist = current_playlist #if reach the last playlist, go back to top
                             print("Current playlist = " + str(current_playlist))
@@ -247,8 +289,8 @@ while run:
                         if current_p1_song != len(p1_songs):
                             current_p1_song += 1
                             print("Current song (in playlist 1): song " + str(current_p1_song) )
-                            p1_songs[current_p1_song-1].hover_button()
-                            p1_songs[current_p1_song-2].not_hover_button()
+                            p1_songs[current_p1_song-1].hover_option()
+                            p1_songs[current_p1_song-2].not_hover_option()
                         else:
                             current_p1_song = current_p1_song
                             print("Current song (in playlist 1): song " + str(current_p1_song) )
@@ -258,8 +300,8 @@ while run:
                         if current_p2_song != len(p2_songs):
                             current_p2_song += 1
                             print("Current song (in playlist 2): song " + str(current_p2_song) )
-                            p2_songs[current_p2_song-1].hover_button()
-                            p2_songs[current_p2_song-2].not_hover_button()
+                            p2_songs[current_p2_song-1].hover_option()
+                            p2_songs[current_p2_song-2].not_hover_option()
                         else:
                             current_p2_song = current_p2_song
                             print("Current song (in playlist 2): song " + str(current_p2_song) )
@@ -270,8 +312,8 @@ while run:
                         if current_p3_song != len(p3_songs):
                             current_p3_song += 1
                             print("Current song (in playlist 3): song " + str(current_p3_song) )
-                            p3_songs[current_p3_song-1].hover_button()
-                            p3_songs[current_p3_song-2].not_hover_button()
+                            p3_songs[current_p3_song-1].hover_option()
+                            p3_songs[current_p3_song-2].not_hover_option()
                         else:
                             current_p3_song = current_p3_song
                             print("Current song (in playlist 3): song " + str(current_p3_song) )
@@ -282,8 +324,8 @@ while run:
                         if current_p4_song != len(p4_songs):
                             current_p4_song += 1
                             print("Current song (in playlist 4): song " + str(current_p4_song) )
-                            p4_songs[current_p4_song-1].hover_button()
-                            p4_songs[current_p4_song-2].not_hover_button()
+                            p4_songs[current_p4_song-1].hover_option()
+                            p4_songs[current_p4_song-2].not_hover_option()
                         else:
                             current_p4_song = current_p4_song
                             print("Current song (in playlist 4): song " + str(current_p4_song) )
@@ -294,8 +336,8 @@ while run:
                         if current_p5_song != len(p5_songs):
                             current_p5_song += 1
                             print("Current song (in playlist 5): song " + str(current_p5_song) )
-                            p5_songs[current_p5_song-1].hover_button()
-                            p5_songs[current_p5_song-2].not_hover_button()
+                            p5_songs[current_p5_song-1].hover_option()
+                            p5_songs[current_p5_song-2].not_hover_option()
                         else:
                             current_p5_song = current_p5_song
                             print("Current song (in playlist 5): song " + str(current_p5_song) )

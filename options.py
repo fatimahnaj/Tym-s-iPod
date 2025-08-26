@@ -26,7 +26,7 @@ def insert_text(text,size,color,x,y):
     rect_text = set_text.get_rect(center=(x,y))
     screen.blit(set_text, rect_text)
     
-class BUTTON:
+class OPTION:
     def __init__(self, x, y, width, height, bg_color, text, font_color):
         self.x = x
         self.y = y
@@ -37,19 +37,19 @@ class BUTTON:
         self.font_color = font_color
 
     #display playlist/song
-    def insert_button(self):
-        set_button = pygame.Rect(self.x, self.y, self.width, self.height)
-        pygame.draw.rect(screen, self.bg_color, set_button)
+    def insert_option(self):
+        set_option = pygame.Rect(self.x, self.y, self.width, self.height)
+        pygame.draw.rect(screen, self.bg_color, set_option)
         font = pygame.font.Font("retro_gaming.ttf",16)
         set_text = font.render(self.text, True, self.font_color)
         set_text_rect = pygame.Rect(self.x+19, self.y+8, self.width, self.height)
         screen.blit(set_text, set_text_rect)
     
-    def hover_button(self):
+    def hover_option(self):
         self.bg_color = black
         self.font_color = grey
 
-    def not_hover_button(self):
+    def not_hover_option(self):
         self.bg_color = grey
         self.font_color = black
     
@@ -60,41 +60,41 @@ def draw_box(coordinate, width, height, color):
     set_box = pygame.Rect(x, y, width, height)
     pygame.draw.rect(screen, color, set_box)
 
-p1_song1 = BUTTON(41,104,308,36, black, "A Better Tomorrow", grey)
-p1_song2 = BUTTON(41,140,308,36, grey, "Amazing Things", black)
-p1_song3 = BUTTON(41,176,308,36, grey, "Meet You Halfway", black)
-p1_song4 = BUTTON(41,212,308,36, grey, "Moments of Good Time", black)
+p1_song1 = OPTION(41,104,308,36, black, "A Better Tomorrow", grey)
+p1_song2 = OPTION(41,140,308,36, grey, "Amazing Things", black)
+p1_song3 = OPTION(41,176,308,36, grey, "Meet You Halfway", black)
+p1_song4 = OPTION(41,212,308,36, grey, "Moments of Good Time", black)
 p1_songs = [p1_song1, p1_song2, p1_song3, p1_song4]
 
-p2_song1 = BUTTON(41,104,308,36, black, "if its not you", grey)
-p2_song2 = BUTTON(41,140,308,36, grey, "penjaga hati", black)
-p2_song3 = BUTTON(41,176,308,36, grey, "Take My Half", black)
-p2_song4 = BUTTON(41,212,308,36, grey, "The Only Exception", black)
-p2_song5 = BUTTON(41,248,308,36, grey, "Youre here thats the thing", black)
+p2_song1 = OPTION(41,104,308,36, black, "if its not you", grey)
+p2_song2 = OPTION(41,140,308,36, grey, "penjaga hati", black)
+p2_song3 = OPTION(41,176,308,36, grey, "Take My Half", black)
+p2_song4 = OPTION(41,212,308,36, grey, "The Only Exception", black)
+p2_song5 = OPTION(41,248,308,36, grey, "Youre here thats the thing", black)
 p2_songs = [p2_song1, p2_song2, p2_song3, p2_song4, p2_song5]
 
-p3_song1 = BUTTON(41,104,308,36, black, "Its Not The Same Anymore", grey)
-p3_song2 = BUTTON(41,140,308,36, grey, "Kembali Pulang", black)
-p3_song3 = BUTTON(41,176,308,36, grey, "No One Noticed", black)
-p3_song4 = BUTTON(41,212,308,36, grey, "Runtuh", black)
+p3_song1 = OPTION(41,104,308,36, black, "Its Not The Same Anymore", grey)
+p3_song2 = OPTION(41,140,308,36, grey, "Kembali Pulang", black)
+p3_song3 = OPTION(41,176,308,36, grey, "No One Noticed", black)
+p3_song4 = OPTION(41,212,308,36, grey, "Runtuh", black)
 p3_songs = [p3_song1, p3_song2, p3_song3, p3_song4]
 
-p4_song1 = BUTTON(41,104,308,36, black, "Departure", grey)
-p4_song2 = BUTTON(41,140,308,36, grey, "late hrs", black)
-p4_song3 = BUTTON(41,176,308,36, grey, "No Surprises", black)
-p4_song4 = BUTTON(41,212,308,36, grey, "Skybeam", black)
-p4_song5 = BUTTON(41,248,308,36, grey, "Space Things", black)
+p4_song1 = OPTION(41,104,308,36, black, "Departure", grey)
+p4_song2 = OPTION(41,140,308,36, grey, "late hrs", black)
+p4_song3 = OPTION(41,176,308,36, grey, "No Surprises", black)
+p4_song4 = OPTION(41,212,308,36, grey, "Skybeam", black)
+p4_song5 = OPTION(41,248,308,36, grey, "Space Things", black)
 p4_songs = [p4_song1, p4_song2, p4_song3, p4_song4, p4_song5]
 
-p5_song1 = BUTTON(41,104,308,36, black, "SLAY!", grey)
-p5_song2 = BUTTON(41,140,308,36, grey, "Shadows", black)
-p5_song3 = BUTTON(41,176,308,36, grey, "Monster", black)
+p5_song1 = OPTION(41,104,308,36, black, "SLAY!", grey)
+p5_song2 = OPTION(41,140,308,36, grey, "Shadows", black)
+p5_song3 = OPTION(41,176,308,36, grey, "Monster", black)
 p5_songs = [p5_song1, p5_song2, p5_song3]
 
-playlist_1 = BUTTON(41,104,308,36, grey, "Study Jazz", black)
-playlist_2 = BUTTON(41,140,308,36, black, "White Roses", grey)
-playlist_3 = BUTTON(41,176,308,36, grey, "Adulting", black)
-playlist_4 = BUTTON(41,212,308,36, grey, "Synthwave", black)
-playlist_5 = BUTTON(41,248,308,36, grey, "Noise", black)
+playlist_1 = OPTION(41,104,308,36, grey, "Study Jazz", black)
+playlist_2 = OPTION(41,140,308,36, black, "White Roses", grey)
+playlist_3 = OPTION(41,176,308,36, grey, "Adulting", black)
+playlist_4 = OPTION(41,212,308,36, grey, "Synthwave", black)
+playlist_5 = OPTION(41,248,308,36, grey, "Noise", black)
 
 playlists = [playlist_1, playlist_2, playlist_3, playlist_4, playlist_5]
