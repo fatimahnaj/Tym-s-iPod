@@ -18,6 +18,8 @@ playing = False
 black = (57, 55, 57)
 grey = (203, 202, 197)
 white = (225, 226, 228)
+light_grey = (134, 134, 134)
+pure_white = (255, 255, 255)
 
 #insert text
 def insert_text(text,size,color,x,y):
@@ -35,6 +37,9 @@ class OPTION:
         self.bg_color = bg_color
         self.text = text
         self.font_color = font_color
+        self.triggered = False
+        self.starting_time = 0
+        self.max_duration = 3000
 
     #display playlist/song
     def insert_option(self):
@@ -52,7 +57,70 @@ class OPTION:
     def not_hover_option(self):
         self.bg_color = grey
         self.font_color = black
+
+    def option_triggered(self): #used when requirements are met
+        self.triggered = True 
+        self.starting_time = pygame.time.get_ticks()
+
+    def option_clicked(self):
+            # global switch
+        #if self.triggered: #make sure the option has been triggered
+            self.triggered = True 
+            self.starting_time = pygame.time.get_ticks()
+            print("self.starting_time = " + str(self.starting_time))
+            #limit the button to only show changes for a period of a time
+            # if self.starting_time < self.max_duration:
+                # chg the option color
+            self.bg_color = light_grey
+            self.font_color = pure_white
+            # else:
+            #     self.triggered = False #if dh terlebih masa, reset option tu jadi non triggered
+            #     switch = True
+
+    def return_option(self):
+        global switch
+        current_time = pygame.time.get_ticks()
+        if current_time >= self.starting_time+100:
+            switch = True
     
+class IMGBUTTON:
+    def __init__(self, x, y, width=0, height=0):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.center_x = self.x - self.width // 2
+        self.center_y = self.y - self.height // 2
+        self.click_sound = pygame.mixer.Sound('Button.mp3') #if want
+        self.start_time = 0
+        self.max_duration = 3000
+        self.is_triggered = False
+    
+    def show_button(self,image_link):
+            image = pygame.image.load(image_link)
+            screen.blit(image, (self.x,self.y))
+
+    def check_if_clicked(self):
+            cursor_pos = pygame.mouse.get_pos()
+            rect = pygame.Rect(self.x, self.y, self.width, self.height)
+            if cursor_pos[0] in range(rect.left, rect.right) and cursor_pos[1] in range(rect.top, rect.bottom):
+                self.click_sound.play()
+                self.is_triggered = True
+                return True
+            else :
+                self.is_triggered = False
+                return False
+            
+    def is_selected(self):
+        self.click_sound.play()
+        self.is_triggered = True
+        return True
+    
+    def button_clicked(self,new_image_link):
+        if self.is_triggered:
+            new_image = pygame.image.load(new_image_link)
+            screen.blit(new_image, (self.x,self.y))
+
 #box (will act as background for text)
 def draw_box(coordinate, width, height, color):
     x = coordinate[0]

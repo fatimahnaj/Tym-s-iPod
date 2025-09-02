@@ -10,22 +10,28 @@ screen_size = (390,600) # give screen size
 screen = pygame.display.set_mode(screen_size) # opens up a window 
 pygame.display.set_caption("Tym's iPod") # window name
 pygame_icon = pygame.image.load('play_status.png')
-pygame.display.set_icon(pygame_icon)
+pygame.display.set_icon(pygame_icon) #change the icon img
+clock = pygame.time.Clock()
+clock.tick(60)  # Limit frame rate to 60 FPS
+pygame.time.set_timer(pygame.USEREVENT, 1000)
+time_passed = 0
+start_ticking = False
+switch = False
 
-
-#initialise variable
-current_playlist = 2
-current_p1_song = 1
-current_p2_song = 1
-current_p3_song = 1
-current_p4_song = 1
-current_p5_song = 1
-playing = False
+# #initialise variable
+# current_playlist = 2
+# current_p1_song = 1
+# current_p2_song = 1
+# current_p3_song = 1
+# current_p4_song = 1
+# current_p5_song = 1
+# playing = False
 
 #colors
 black = (57, 55, 57)
 grey = (203, 202, 197)
 white = (225, 226, 228)
+
 
 #popup any image
 def popup_image(image_link,x,y):
@@ -54,48 +60,6 @@ class IMAGE:
             self.image_link = hover_image_link
             image = pygame.image.load(self.image_link)
         screen.blit(image, (self.x,self.y))
-
-class BUTTON:
-    def __init__(self,image,x,y):
-        self.trigger_button = False
-        self.start_time = 0
-        self.max_duration = 3000
-        self.x = x
-        self.y = y
-        if image == None:
-            self.image = ""
-        else:
-            self.image = image
-
-    #used when the reuirements are met
-    def trigger(self):
-        self.trigger_button = True #
-        self.start_time = pygame.time.get_ticks()
-
-    def show_img(self):
-        if self.trigger_button:
-                current_time = pygame.time.get_ticks()
-                #limit the button to only show changes for a period of a time
-                if current_time - self.start_time < self.max_duration:
-                    # Load the image
-                    image = pygame.image.load(self.image).convert_alpha()
-                    # Calculate its position to center it on the screen
-                    rect = image.get_rect()
-                    screen.blit(image, (self.x,self.y))
-                else:
-                    self.trigger_button = False
-
-    def show_text(self,text,size,color=black):
-            if self.trigger_button:
-                current_time = pygame.time.get_ticks()
-                if current_time - self.start_time < self.max_duration:
-                    #load the texts
-                    font = pygame.font.Font("DePixelHalbfett.ttf",size)
-                    rect = font.render(f"{text}", True, color)
-                    rect_text = rect.get_rect(center=(self.x,self.y))
-                    screen.blit(rect, rect_text)
-                else:
-                    self.trigger_button = False
 
 menu_button = IMAGE('menu_text.png',196-22,221+122)
 
@@ -347,26 +311,31 @@ while run:
             elif event.key == pygame.K_RETURN:
                 #changing screen to the selected playlist
                 if page == "homescreen":
-                    if current_playlist == 1:
-                        playlist1_screen()
-                        page = "playlist_1"
-                        print("Changing to screen " + page + " ...")
-                    elif current_playlist == 2:
-                        playlist2_screen()
-                        page = "playlist_2"
-                        print("Changing to screen " + page + " ...")
-                    elif current_playlist == 3:
-                        playlist3_screen()
-                        page = "playlist_3"
-                        print("Changing to screen " + page + " ...")
-                    elif current_playlist == 4:
-                        playlist4_screen()
-                        page = "playlist_4"
-                        print("Changing to screen " + page + " ...")
-                    elif current_playlist == 5:
-                        playlist5_screen()
-                        page = "playlist_5"
-                        print("Changing to screen " + page + " ...")
+                        if current_playlist == 1:
+                            start_ticking = True
+                            playlists[current_playlist-1].option_clicked()
+                            homescreen()#redraw
+                            playlists[current_playlist-1].return_option()
+                            if switch: #wait 1 second before changing screen
+                                playlist1_screen()
+                            page = "playlist_1"
+                            print("Changing to screen " + page + " ...")
+                        elif current_playlist == 2:
+                            playlist2_screen()
+                            page = "playlist_2"
+                            print("Changing to screen " + page + " ...")
+                        elif current_playlist == 3:
+                            playlist3_screen()
+                            page = "playlist_3"
+                            print("Changing to screen " + page + " ...")
+                        elif current_playlist == 4:
+                            playlist4_screen()
+                            page = "playlist_4"
+                            print("Changing to screen " + page + " ...")
+                        elif current_playlist == 5:
+                            playlist5_screen()
+                            page = "playlist_5"
+                            print("Changing to screen " + page + " ...")
                 #play selected song from playlist_1
                 elif page == "playlist_1":
                     if current_p1_song == 1:
@@ -436,6 +405,10 @@ while run:
             elif event.key == pygame.K_ESCAPE:
                 page = "homescreen"
                 homescreen()
+
+            #will count each second that passed, after start_ticking is set to True
+            elif event.type == pygame.USEREVENT and start_ticking: 
+                time_passed += 1
 
     pygame.display.flip() #updates the display
 
