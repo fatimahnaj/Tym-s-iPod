@@ -1,12 +1,12 @@
 App name : Tym's iPod
 Framework : Python, Pygame
 
------------ Description -----------------------
+Description :
 This is a fully self developed app where I create a music player app applying the design of the standard Apple iPods. 
 Disclaimer : This is a super unserious for fun DIY typa project and still currently in WIP but it can play musics with limited functionality.
 
 
------------ User guides ------------------------
+User guides :
 Navigate through the songs and playlist using UP DOWN arrow button. 
 Click ENTER to enter the selected playlist folder or play the selected song.
 Clicking ENTER while song is playing will cause the music to pause. Click ENTER again to unpause.
